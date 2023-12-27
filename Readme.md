@@ -1,9 +1,17 @@
-# Build the attached image
-## Build the container image
+# My Custom Ghost Dockerfile
+
+This file now does 3 things
+1. Use the most current Ghost (alpine) image
+2. Add the GCS storage adapter and some variables to the container
+3. Load my version of the Ghost theme Casper-i18n
+
+The steps below explain how to use it with Google Cloud Run.
+
+## 1. Build the container image, locally
 
     docker build . --tag ghost:gcs
 
-## Try the image locally
+## 2. Try the image locally
 Run it locally, with the bucket name as an Environment Variable
 
     docker run -d --name local-ghost -e NODE_ENV=development -e storage__gcs__bucket=gcs.janx.nl -p 8080:2368 ghost:gcs
@@ -26,7 +34,7 @@ Stop and remove the local container
 # 3. To the Cloud!
 Following along the lines of https://parondeau.com/blog/self-hosting-ghost-gcp, using the image with Cloud SQL in production. But this time, with feeewing. (What was that? This is not a charade. Now try again.)
 
-## Database and mail service
+## 3.1 Database and mail service
 Set up the MySQL 8.0 database service, i.e. `www-leenders-info:europe-west4:leenders-shared`, with a database named `ghost`.
 
 Create the DB password as a secret:
@@ -40,7 +48,7 @@ and store password as a secret:
     MAILGUN_PASSWORD=<<mailgun_password>>
     echo -n "${MAILGUN_PASSWORD}" | gcloud secrets create mailgun-password --replication-policy="automatic" --data-file=-
 
-## Set up the service Account
+## 3.2 Set up the service Account
 Create a new Service Account for the Ghost production service, and give it permissions.
 
 1. Storage Object Admin on the storage bucket
@@ -50,7 +58,7 @@ Create a new Service Account for the Ghost production service, and give it permi
 1. Read access on the secrets
 1. Cloud SQL Client
 
-## Use the image in Cloud Run
+## 3.3 Use the image in Cloud Run
 Set up a new container registry in the project (once):
 
     gcloud artifacts repositories create ghost --repository-format=docker --location=europe-west4 --description="My Ghost repo"
@@ -88,4 +96,4 @@ It takes a few minutes before Ghosts comes out of the "Busy Updating" maintenanc
 
 
 # To do: 
-- local containers to connect docker to Cloud SQL
+- Use local containers to connect docker to Cloud SQL
