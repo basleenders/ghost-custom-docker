@@ -13,8 +13,8 @@ The steps below explain how to use it with Google Cloud Run.
 
 ## 2. Try the image locally
 Run it locally, with the bucket name as an Environment Variable
-
-    docker run -d --name local-ghost -e NODE_ENV=development -e storage__gcs__bucket=gcs.janx.nl -p 8080:2368 ghost:gcs
+    
+    docker run -d --name local-ghost -e NODE_ENV=development -e storage__gcs__bucket=<<bucketname>> -p 8080:2368 ghost:gcs
 
 Preview it in the local browser
 
@@ -53,7 +53,8 @@ Create a new Service Account for the Ghost production service, and give it permi
 
 1. Storage Object Admin on the storage bucket
     ```
-    gcloud storage buckets add-iam-policy-binding gs://gcs.janx.nl --member=ghost-production@janx-spirit.iam.gserviceaccount.com --role=roles/storage.objectAdmin
+    gcloud storage buckets add-iam-policy-binding gs://<<bucketname>> \
+    --member=ghost@<<project>>.iam.gserviceaccount.com --role=roles/storage.objectAdmin
     ```
 1. Read access on the secrets
 1. Cloud SQL Client
