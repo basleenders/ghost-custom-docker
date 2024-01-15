@@ -108,4 +108,6 @@ It takes a few minutes before Ghosts comes out of the "Busy Updating" maintenanc
 
 
 # To do: 
+- Set up Cloud Build & trigger to build on the Dockerfile of this repo
+- Also create triggers for the repos of Ghost and the Theme
 - Use local containers to connect docker to Cloud SQL
