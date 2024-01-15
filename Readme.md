@@ -34,31 +34,42 @@ Stop and remove the local container
 # 3. To the Cloud!
 Following along the lines of https://parondeau.com/blog/self-hosting-ghost-gcp, using the image with Cloud SQL in production. But this time, with feeewing. (What was that? This is not a charade. Now try again.)
 
-## 3.1 Database and mail service
+## 3.1 Bucket, Database and Mail service
+Create a bucket within the Ghost project, i.e. `gcs.janx.nl`. And a service account, i.e. `ghost@janx-spirit.iam.gserviceaccount.com`.
+
 Set up the MySQL 8.0 database service, i.e. `www-leenders-info:europe-west4:leenders-shared`, with a database named `ghost`.
 
 Create the DB password as a secret:
 
-    DB_PASSWORD=<<database_password>>
+    DB_PASSWORD=<database_password>
     echo -n "${DB_PASSWORD}" | gcloud secrets create db-password --replication-policy="automatic" --data-file=-
 
 Create Mailgun SMTP account (follow https://www.ajfriesen.com/self-hosting-ghost-with-docker-compose/)
 and store password as a secret:
 
-    MAILGUN_PASSWORD=<<mailgun_password>>
+    MAILGUN_PASSWORD=<mailgun_password>
     echo -n "${MAILGUN_PASSWORD}" | gcloud secrets create mailgun-password --replication-policy="automatic" --data-file=-
 
 ## 3.2 Set up the service Account
 Create a new Service Account for the Ghost production service, and give it permissions.
 
 1. Storage Object Admin on the storage bucket
-    ```
-    gcloud storage buckets add-iam-policy-binding gs://<<bucketname>> \
-    --member=ghost@<<project>>.iam.gserviceaccount.com --role=roles/storage.objectAdmin
-    ```
-1. Read access on the secrets
+```
+gcloud storage buckets add-iam-policy-binding gs://<bucketname> \
+--member=ghost@janx-spirit.iam.gserviceaccount.com --role=roles/storage.objectAdmin
+```
+1. Read access on the secrets (i.e.g secret-id = `db-password` / `mailgun_password`)
+```
+gcloud secrets add-iam-policy-binding <secret-id> \
+--member="ghost@janx-spirit.iam.gserviceaccount.com" \
+--role="roles/secretmanager.secretAccessor"
+```
 1. Cloud SQL Client
-
+```
+gcloud projects add-iam-policy-binding janx-spirit \
+--member="ghost@janx-spirit.iam.gserviceaccount.com" \
+--role=roles/cloudsql.instanceUser
+```
 ## 3.3 Use the image in Cloud Run
 Set up a new container registry in the project (once):
 
@@ -70,7 +81,7 @@ Now, tag the image (built above) as the latest build and push it to the project'
     docker push europe-west4-docker.pkg.dev/janx-spirit/ghost/ghost-gcs:latest
 
 Deploy the Cloud Run revision, running as the Service Account, with all the config and secrets in environment variables:
- ```
+```
 gcloud run deploy ghost \
 --image=europe-west4-docker.pkg.dev/janx-spirit/ghost/ghost-gcs:latest \
 --set-env-vars='url=https://janx.nl' \
