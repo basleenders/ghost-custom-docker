@@ -19,4 +19,4 @@ RUN set -ex; \
 RUN mkdir -p /tmp/custom ; \
     wget -O - -q "https://github.com/basleenders/casper-i18n/archive/refs/heads/master.tar.gz" | tar xz -C /tmp/custom ; \    
     mv -v /tmp/custom/* "$GHOST_INSTALL/content.orig/themes/casper-i18n" ; \
-    mv ./redirects.json $GHOST_INSTALL/settings/
+    mv redirects.json $GHOST_INSTALL/settings/
