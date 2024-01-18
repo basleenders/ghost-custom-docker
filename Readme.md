@@ -100,14 +100,22 @@ gcloud run deploy ghost \
 --set-cloudsql-instances=www-leenders-info:europe-west4:leenders-shared \
 --set-secrets=database__connection__password=projects/693812269963/secrets/db-password:latest,mail__options__auth__pass=mailgun-password:latest \
 --service-account=ghost-production@janx-spirit.iam.gserviceaccount.com \
---execution-environment=gen1 \
+--set-env-vars=database__connection__pool__min=1 \
+--set-env-vars=database__connection__pool__max=20 \
+--execution-environment=gen2 \
 --region=europe-west4 \
 --project=janx-spirit
+
+gcloud run services update-traffic ghost --to-latest
 ```
-It takes a few minutes before Ghosts comes out of the "Busy Updating" maintenance mode.
-
-
-# To do: 
-- Set up Cloud Build & trigger to build on the Dockerfile of this repo
-- Also create triggers for the repos of Ghost and the Theme
-- Use local containers to connect docker to Cloud SQL
+It takes a few minutes before Ghosts comes out of the "Busy Updating" maintenance mode. The following startup probe appears to work as expected:
+```
+startupProbe:
+      initialDelaySeconds: 180
+      timeoutSeconds: 10
+      periodSeconds: 30
+      failureThreshold: 10
+      httpGet:
+        path: /favicon.ico
+        port: 2368
+```
