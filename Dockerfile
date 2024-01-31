@@ -6,14 +6,10 @@ RUN mkdir -p /tmp/gcs "$GHOST_INSTALL/current/core/server/adapters/storage/gcs";
     npm install --prefix /tmp/gcs/package --omit=dev --omit=optional --no-progress ; \
     mv -v /tmp/gcs/package/* "$GHOST_INSTALL/current/core/server/adapters/storage/gcs"
 
-# Use the Ghost CLI to set some pre-defined values.
+# Use the Ghost CLI to set (only) the neccessary config values.
 RUN set -ex; \
     su-exec node ghost config storage.active gcs; \
-    su-exec node ghost config storage.gcs.host "storage.googleapis.com"; \
-    su-exec node ghost config storage.gcs.protocol "https"; \
-    su-exec node ghost config storage.gcs.hash true; \
     su-exec node ghost config storage.gcs.hashAlgorithm "sha512"; \
-    su-exec node ghost config storage.gcs.hashLength "16"; 
 
 # Add my fork of the Casper i18n Theme from https://github.com/GenZmeY/casper-i18n/
 RUN mkdir -p /tmp/custom ; \
