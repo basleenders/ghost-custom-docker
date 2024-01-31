@@ -9,7 +9,7 @@ RUN mkdir -p /tmp/gcs "$GHOST_INSTALL/current/core/server/adapters/storage/gcs";
 # Use the Ghost CLI to set (only) the neccessary config values.
 RUN set -ex; \
     su-exec node ghost config storage.active gcs; \
-    su-exec node ghost config storage.gcs.hashAlgorithm "sha512"; \
+    su-exec node ghost config storage.gcs.hashAlgorithm "sha512"; 
 
 # Add my fork of the Casper i18n Theme from https://github.com/GenZmeY/casper-i18n/
 RUN mkdir -p /tmp/custom ; \
