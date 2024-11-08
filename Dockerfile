@@ -4,7 +4,7 @@ FROM ghost:5-alpine
 RUN mkdir -p /tmp/gcs "$GHOST_INSTALL/current/core/server/adapters/storage/gcs"; \
     wget -O - -q "https://api.github.com/repos/danmasta/ghost-gcs-adapter/tarball/master" | tar xz --strip-components=1 -C /tmp/gcs ; \
     npm install --prefix /tmp/gcs --omit=dev --omit=optional --no-progress ; \
-    mv -v /tmp/gcs/package/* "$GHOST_INSTALL/current/core/server/adapters/storage/gcs"
+    mv -v /tmp/gcs/* "$GHOST_INSTALL/current/core/server/adapters/storage/gcs"
 
 # Use the Ghost CLI to set (only) the neccessary config values.
 RUN set -ex; \
