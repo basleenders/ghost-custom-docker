@@ -2,7 +2,7 @@ FROM ghost:5-alpine
 
 # Add GCS Adapter, from https://github.com/danmasta/ghost-gcs-adapter
 RUN mkdir -p /tmp/gcs "$GHOST_INSTALL/current/core/server/adapters/storage/gcs"; \
-    wget -O - -q "$(npm view @danmasta/ghost-gcs-adapter dist.tarball)" | tar xz -C /tmp/gcs ; \
+    wget -O - -q "https://api.github.com/repos/danmasta/ghost-gcs-adapter/tarball/master" | tar xz -C /tmp/gcs ; \
     npm install --prefix /tmp/gcs/package --omit=dev --omit=optional --no-progress ; \
     mv -v /tmp/gcs/package/* "$GHOST_INSTALL/current/core/server/adapters/storage/gcs"
 
