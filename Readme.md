@@ -35,7 +35,7 @@ Stop and remove the local container
 Following along the lines of https://parondeau.com/blog/self-hosting-ghost-gcp, using the image with Cloud SQL in production. But this time, with feeewing. (What was that? This is not a charade. Now try again.)
 
 ## 3.1 Bucket, Database and Mail service
-Create a bucket within the Ghost project, i.e. `gcs.janx.nl`. And a service account, i.e. `ghost@<<project>>.iam.gserviceaccount.com`.
+Create a bucket <<bucketname>> within the Ghost project. And a service account, i.e. `ghost@<<project>>.iam.gserviceaccount.com`.
 
 Set up the MySQL 8.0 database service, i.e. `<<project>:<<location>>:<<sql-srv>>`, with a database named `ghost`.
 
@@ -63,7 +63,7 @@ gcloud storage buckets add-iam-policy-binding gs://<<bucketname>> \
 ```
 1. Read access on the secrets (i.e.g secret-id = `db-password` / `mailgun_password`)
 ```
-gcloud secrets add-iam-policy-binding <secret-id> \
+gcloud secrets add-iam-policy-binding <<secret-id>> \
 --member="ghost@<<project>>.iam.gserviceaccount.com" \
 --role="roles/secretmanager.secretAccessor"
 ```
