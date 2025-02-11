@@ -34,21 +34,30 @@ Stop and remove the local container
 # 3. To the Cloud!
 Following along the lines of https://parondeau.com/blog/self-hosting-ghost-gcp, using the image with Cloud SQL in production. But this time, with feeewing. (What was that? This is not a charade. Now try again.)
 
-## 3.1 Bucket, Database and Mail service
-Create a bucket <<bucketname>> within the Ghost project. And a service account, i.e. `ghost@<<project>>.iam.gserviceaccount.com`.
+## 3.1 Service-account, Database and Mail service
+First, create a service account, i.e. `ghost@<<project>>.iam.gserviceaccount.com`.
+
+You probably already created a bucket. Don't forget set public read access, because it will contain your (public) images. And the service account will need to write into the bucket:
+    
+    gcloud storage buckets add-iam-policy-binding  gs://<<bucketname>> \
+    --member=allUsers --role=roles/storage.objectViewer
+    
+    gcloud storage buckets add-iam-policy-binding gs://<<bucketname>> \
+    --member=<<serviceaccount>> \
+    --role=roles/storage.objectAdmin
 
 Set up the MySQL 8.0 database service, i.e. `<<project>:<<location>>:<<sql-srv>>`, with a database named `ghost`.
 
-Create the DB password as a secret:
+Store the DB password as a managed secret:
 
     DB_PASSWORD=<database_password>
     echo -n "${DB_PASSWORD}" | gcloud secrets create db-password --replication-policy="automatic" --data-file=-
 
 Create Mailgun SMTP account (follow https://www.ajfriesen.com/self-hosting-ghost-with-docker-compose/)
-and store user & password as a secret:
+and store user & password as secrets:
 
     MAILGUN_USER=<<mailgun_user>>
-    echo -n "${MAILGUN_PASSWORD}" | gcloud secrets create mailgun-user --replication-policy="automatic" --data-file=-
+    echo -n "${MAILGUN_USER}" | gcloud secrets create mailgun-user --replication-policy="automatic" --data-file=-
 
     MAILGUN_PASSWORD=<<mailgun_password>>
     echo -n "${MAILGUN_PASSWORD}" | gcloud secrets create mailgun-password --replication-policy="automatic" --data-file=-
@@ -61,7 +70,7 @@ Create a new Service Account for the Ghost production service, and give it permi
 gcloud storage buckets add-iam-policy-binding gs://<<bucketname>> \
 --member=ghost@<<project>>.iam.gserviceaccount.com --role=roles/storage.objectAdmin
 ```
-1. Read access on the secrets (i.e.g secret-id = `db-password` / `mailgun_password`)
+1. Read access on the secrets (i.e. secret-id = `db-password`, `mailgun_user`, and `mailgun_password`)
 ```
 gcloud secrets add-iam-policy-binding <<secret-id>> \
 --member="ghost@<<project>>.iam.gserviceaccount.com" \
