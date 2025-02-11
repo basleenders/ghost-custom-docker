@@ -3,7 +3,7 @@
 This file now does 3 things
 1. Use the most current Ghost (alpine) image
 2. Add the GCS storage adapter and some variables to the container
-3. Load the Ghost theme Casper-i18n
+3. Load the Ghost theme [Casper-i18n](https://github.com/GenZmeY/casper-i18n/) and my own theme [Source Multitag](https://github.com/basleenders/ghost-source-multitag)
 
 The steps below explain how to use it with Google Cloud Run. More explanation, in Dutch, can be found at my [weblog that is hosted on Cloud Run](https://janx.nl/ghost-in-the-cloud-shell/).
 
@@ -50,7 +50,7 @@ Set up the MySQL 8.0 database service, i.e. `<<project>:<<location>>:<<sql-srv>>
 
 Store the DB password as a managed secret:
 
-    DB_PASSWORD=<database_password>
+    DB_PASSWORD=<<database_password>>
     echo -n "${DB_PASSWORD}" | gcloud secrets create db-password --replication-policy="automatic" --data-file=-
 
 Create Mailgun SMTP account (follow https://www.ajfriesen.com/self-hosting-ghost-with-docker-compose/)

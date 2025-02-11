@@ -15,3 +15,8 @@ RUN set -ex; \
 RUN mkdir -p /tmp/custom ; \
     wget -O - -q "https://github.com/GenZmeY/casper-i18n//archive/refs/heads/master.tar.gz" | tar xz -C /tmp/custom ; \    
     mv -v /tmp/custom/* "$GHOST_INSTALL/content.orig/themes/casper-i18n" ; 
+
+# Add my personalized theme https://github.com/basleenders/ghost-source-multitag
+RUN mkdir -p /tmp/custom ; \
+    wget -O - -q "https://github.com/basleenders/ghost-source-multitag/archive/refs/heads/main.tar.gz" | tar xz -C /tmp/custom ; \    
+    mv -v /tmp/custom/* "$GHOST_INSTALL/content.orig/themes/source-multitag" ; 
