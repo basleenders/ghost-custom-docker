@@ -93,7 +93,7 @@ gcloud run deploy ghost \
 --set-env-vars='database__connection__socketPath=/cloudsql/<<project>:<<location>>:<<sql-srv>>' \
 --set-env-vars=database__connection__database=ghost \
 --set-env-vars=database__connection__user=root \
---set-env-vars=storage__gcs__bucket=gcs.janx.nl \
+--set-env-vars=storage__gcs__bucket=<<bucketname>> \
 --set-env-vars=mail__transport=SMTP \
 --set-env-vars=mail__options__service=Mailgun \
 --set-env-vars=mail__options__host=smtp.eu.mailgun.org \
