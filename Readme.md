@@ -1,9 +1,9 @@
 # My Custom Ghost Dockerfile
 
 This file now does 3 things
-1. Use the most current Ghost (alpine) image
-2. Add the GCS storage adapter and some variables to the container
-3. Load the Ghost theme [Casper-i18n](https://github.com/GenZmeY/casper-i18n/) and my own theme [Source Multitag](https://github.com/basleenders/ghost-source-multitag)
+1. Use the current [Ghost docker image](https://hub.docker.com/_/ghost) (alpine) 
+2. Add the [GCS storage adapter](https://github.com/danmasta/ghost-gcs-adapter) and some variables to the container
+3. Load the Ghost theme [Casper-i18n](https://github.com/GenZmeY/casper-i18n/), and my own theme [Source Multitag](https://github.com/basleenders/ghost-source-multitag)
 
 The steps below explain how to use it with Google Cloud Run. A more visual explanation, in Dutch, can be found at my [weblog that is hosted on Cloud Run](https://janx.nl/ghost-in-the-cloud-shell/).
 
@@ -96,8 +96,8 @@ Deploy the Cloud Run revision, running as the Service Account, with all the conf
 ```
 gcloud run deploy ghost \
 --image=europe-west4-docker.pkg.dev/<<project>>/ghost/ghost-gcs:latest \
---set-env-vars='url=https://janx.nl' \
---set-env-vars='admin__url=https://ghost.janx.nl' \
+--set-env-vars='url=https://<<site-frontend>>' \
+--set-env-vars='admin__url=https://<<site-backend>>' \
 --set-env-vars=database__client=mysql \
 --set-env-vars='database__connection__socketPath=/cloudsql/<<project>:<<location>>:<<sql-srv>>' \
 --set-env-vars=database__connection__database=ghost \
@@ -115,7 +115,7 @@ gcloud run deploy ghost \
 --set-env-vars=database__connection__pool__max=20 \
 --execution-environment=gen2 \
 --region=europe-west4 \
---project=janx-spirit
+--project=<<project>>
 --port=2368
 
 gcloud run services update-traffic ghost --to-latest
