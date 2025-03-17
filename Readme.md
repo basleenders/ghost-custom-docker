@@ -5,7 +5,7 @@ This file now does 3 things
 2. Add the [GCS storage adapter](https://github.com/danmasta/ghost-gcs-adapter) and some variables to the container
 3. Load the Ghost theme [Casper-i18n](https://github.com/GenZmeY/casper-i18n/), and my own theme [Source Multitag](https://github.com/basleenders/ghost-source-multitag)
 
-The steps below explain how to use it with Google Cloud Run. A more visual explanation, in Dutch, can be found at my [weblog that is hosted on Cloud Run](https://janx.nl/ghost-in-the-cloud-shell/).
+The steps below explain how to use it with Google Cloud Run. An elaborate explanation, in Dutch, can be found at my [weblog that is hosted on Cloud Run](https://janx.nl/ghost-in-the-cloud-shell/).
 
 ## 1. Build the container image, locally
 
