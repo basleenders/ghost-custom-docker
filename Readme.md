@@ -1,7 +1,7 @@
 # My Custom Ghost Dockerfile
 
 This file now does 3 things
-1. Use the current [Ghost docker image](https://hub.docker.com/_/ghost) (alpine), now 5.118
+1. Use the current [Ghost docker image](https://hub.docker.com/_/ghost) (alpine)
 2. Add the [GCS storage adapter](https://github.com/danmasta/ghost-gcs-adapter) and some variables to the container
 3. Load the Ghost theme [Casper-i18n](https://github.com/GenZmeY/casper-i18n/), and my own theme [Source Multitag](https://github.com/basleenders/ghost-source-multitag)
 
