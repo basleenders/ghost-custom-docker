@@ -1,4 +1,4 @@
-FROM ghost:5-alpine
+FROM ghost:6-alpine
 
 # Add GCS Adapter, from https://github.com/danmasta/ghost-gcs-adapter
 RUN mkdir -p /tmp/gcs "$GHOST_INSTALL/current/core/server/adapters/storage/gcs"; \
