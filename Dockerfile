@@ -1,3 +1,4 @@
+# Start from the mot recent (6.x) Alpine Ghost image 
 FROM ghost:6-alpine
 RUN apk add --no-cache bash su-exec
 
